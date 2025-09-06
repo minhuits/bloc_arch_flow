@@ -29,7 +29,7 @@ void main() {
       mockEnvironment = MockCounter();
     });
 
-    // 초기 상태 테스트
+    // Initial 테스트
     blocTest<CounterTcaBloc, CounterState>(
       '블록이 초기 상태로 시작하는지 확인',
       build: () => CounterTcaBloc(mockEnvironment),
@@ -39,25 +39,25 @@ void main() {
       },
     );
 
-    // IncrementTCA 테스트
+    // Increment 테스트
     blocTest<CounterTcaBloc, CounterState>(
-      'IncrementTCA 액션 시 count가 1 증가하는지 확인',
+      'Increment 액션 시 count가 1 증가하는지 확인',
       build: () => CounterTcaBloc(mockEnvironment),
       act: (bloc) => bloc.add(CounterActions.increment()),
       expect: () => [CounterState(count: 1, isLoading: false, error: null)],
     );
 
-    // DecrementTCA 테스트
+    // Decrement 테스트
     blocTest<CounterTcaBloc, CounterState>(
-      'DecrementTCA 액션 시 count가 1 감소하는지 확인',
+      'Decrement 액션 시 count가 1 감소하는지 확인',
       build: () => CounterTcaBloc(mockEnvironment),
       act: (bloc) => bloc.add(CounterActions.decrement()),
       expect: () => [CounterState(count: -1, isLoading: false, error: null)],
     );
 
-    // ResetTCA 테스트
+    // Reset 테스트
     blocTest<CounterTcaBloc, CounterState>(
-      'ResetTCA 액션 시 상태가 초기화되는지 확인',
+      'Reset 액션 시 상태가 초기화되는지 확인',
       build: () => CounterTcaBloc(mockEnvironment),
       seed: () => CounterState(count: 10, isLoading: true, error: 'some error'),
       act: (bloc) => bloc.add(CounterActions.reset()),
@@ -109,7 +109,7 @@ void main() {
       },
     );
 
-    // AsyncIncrementSuccess 테스트 (내부적으로 호출되지만, 명시적 테스트)
+    // Success 테스트 (내부적으로 호출되지만, 명시적 테스트)
     blocTest<CounterTcaBloc, CounterState>(
       'AsyncIncrementSuccess 액션 시 상태가 올바르게 업데이트되는지 확인',
       build: () => CounterTcaBloc(mockEnvironment),
@@ -118,7 +118,7 @@ void main() {
       expect: () => [CounterState(count: 10, isLoading: false, error: null)],
     );
 
-    // AsyncIncrementFailed 테스트 (내부적으로 호출되지만, 명시적 테스트)
+    // Failed 테스트 (내부적으로 호출되지만, 명시적 테스트)
     blocTest<CounterTcaBloc, CounterState>(
       'AsyncIncrementFailed 액션 시 에러가 설정되는지 확인',
       build: () => CounterTcaBloc(mockEnvironment),
@@ -132,35 +132,35 @@ void main() {
     final testSuite = CounterBlocTestSuite();
     testSuite.initTestSuite(); // setUp 및 tearDown 자동 실행
 
-    // 초기 상태 테스트
+    // initial 테스트
     blocTest<CounterTcaBloc, CounterState>(
       '블록이 초기 상태로 시작하는지 확인',
       build: () => testSuite.buildBloc(),
-      expect: () => [], // 초기 상태는 build 시점에 이미 설정되므로 추가적인 emit 없음
+      expect: () => [],
       verify: (bloc) {
         expect(bloc.state, CounterState.initial());
       },
     );
 
-    // IncrementTCA 테스트
+    // Increment 테스트
     blocTest<CounterTcaBloc, CounterState>(
-      'IncrementTCA 액션 시 count가 1 증가하는지 확인',
+      'Increment 액션 시 count가 1 증가하는지 확인',
       build: () => testSuite.buildBloc(),
       act: (bloc) => bloc.add(CounterActions.increment()),
       expect: () => [CounterState(count: 1, isLoading: false, error: null)],
     );
 
-    // DecrementTCA 테스트
+    // Decrement 테스트
     blocTest<CounterTcaBloc, CounterState>(
-      'DecrementTCA 액션 시 count가 1 감소하는지 확인',
+      'Decrement 액션 시 count가 1 감소하는지 확인',
       build: () => testSuite.buildBloc(),
       act: (bloc) => bloc.add(CounterActions.decrement()),
       expect: () => [CounterState(count: -1, isLoading: false, error: null)],
     );
 
-    // ResetTCA 테스트
+    // Reset 테스트
     blocTest<CounterTcaBloc, CounterState>(
-      'ResetTCA 액션 시 상태가 초기화되는지 확인',
+      'Reset 액션 시 상태가 초기화되는지 확인',
       build: () => testSuite.buildBloc(),
       seed: () => CounterState(count: 10, isLoading: true, error: 'some error'),
       act: (bloc) => bloc.add(CounterActions.reset()),

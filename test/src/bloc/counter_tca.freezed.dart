@@ -50,100 +50,42 @@ extension CounterActionsPatterns on CounterActions {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(IncrementTCA value)? increment,
 
-    TResult
-
-  Function
-
-  (
-
-  DecrementTCA
-
-  value
-
-  )
-
-  ?
-
-  decrement
-
-  ,
+    TResult Function(DecrementTCA value)? decrement,
 
     TResult Function(IncrementAsyncTCA value)? incrementAsync,
 
-    TResult
-
-  Function
-
-  (
-
-  ResetTCA
-
-  value
-
-  )
-
-  ?
-
-  reset
-
-  ,
+    TResult Function(ResetTCA value)? reset,
 
     TResult Function(AsyncIncrementSuccess value)? success,
 
-    TResult
-
-  Function
-
-  (
-
-  AsyncIncrementFailed
-
-  value
-
-  )
-
-  ?
-
-  failed
-
-  ,
+    TResult Function(AsyncIncrementFailed value)? failed,
 
     TResult Function(NoneTCA value)? none,
 
-    required
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case IncrementTCA() when increment != null:
+        return increment(_that);
+      case DecrementTCA() when decrement != null:
+        return decrement(_that);
+      case IncrementAsyncTCA() when incrementAsync != null:
+        return incrementAsync(_that);
+      case ResetTCA() when reset != null:
+        return reset(_that);
+      case AsyncIncrementSuccess() when success != null:
+        return success(_that);
+      case AsyncIncrementFailed() when failed != null:
+        return failed(_that);
+      case NoneTCA() when none != null:
+        return none(_that);
+      case _:
+        return orElse();
+    }
+  }
 
-  TResult
-
-  orElse
-
-  (
-
-  )
-
-  ,
-}) {
-final _that = this;
-switch (_that) {
-case IncrementTCA() when increment != null:
-return increment(_that);
-case DecrementTCA() when decrement != null:
-return decrement(_that);
-case IncrementAsyncTCA() when incrementAsync != null:
-return incrementAsync(_that);
-case ResetTCA() when reset != null:
-return reset(_that);
-case AsyncIncrementSuccess() when success != null:
-return success(_that);
-case AsyncIncrementFailed() when failed != null:
-return failed(_that);
-case NoneTCA() when none != null:
-return none(_that);
-case _:
-return orElse();
-}
-}
-
-/// A `switch`-like method, using callbacks.
+  /// A `switch`-like method, using callbacks.
 ///
 /// Callbacks receives the raw object, upcasted.
 /// It is equivalent to doing:
@@ -186,16 +128,16 @@ return orElse();
   }
 
   /// A variant of `map` that fallback to returning `null`.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
@@ -229,16 +171,16 @@ return orElse();
   }
 
   /// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -286,35 +228,35 @@ return orElse();
   /// ```
 
   @optionalTypeArgs
-TResult when<TResult extends Object?>({
-required TResult Function() increment,
-required TResult Function() decrement,
-required TResult Function() incrementAsync,
-required TResult Function() reset,
-required TResult Function(int newCount) success,
-required TResult Function(String error) failed,
-required TResult Function() none,
-}) {
-final _that = this;
-switch (_that) {
-case IncrementTCA():
-return increment();
-case DecrementTCA():
-return decrement();
-case IncrementAsyncTCA():
-return incrementAsync();
-case ResetTCA():
-return reset();
-case AsyncIncrementSuccess():
-return success(_that.newCount);
-case AsyncIncrementFailed():
-return failed(_that.error);
-case NoneTCA():
-return none();
-}
-}
+  TResult when<TResult extends Object?>({
+    required TResult Function() increment,
+    required TResult Function() decrement,
+    required TResult Function() incrementAsync,
+    required TResult Function() reset,
+    required TResult Function(int newCount) success,
+    required TResult Function(String error) failed,
+    required TResult Function() none,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case IncrementTCA():
+        return increment();
+      case DecrementTCA():
+        return decrement();
+      case IncrementAsyncTCA():
+        return incrementAsync();
+      case ResetTCA():
+        return reset();
+      case AsyncIncrementSuccess():
+        return success(_that.newCount);
+      case AsyncIncrementFailed():
+        return failed(_that.error);
+      case NoneTCA():
+        return none();
+    }
+  }
 
-/// A variant of `when` that fallback to returning `null`
+  /// A variant of `when` that fallback to returning `null`
 ///
 /// It is equivalent to doing:
 /// ```dart
@@ -369,7 +311,7 @@ class IncrementTCA implements CounterActions {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {
@@ -388,7 +330,7 @@ class DecrementTCA implements CounterActions {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {
@@ -408,7 +350,7 @@ class IncrementAsyncTCA implements CounterActions {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {
@@ -427,7 +369,7 @@ class ResetTCA implements CounterActions {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {
@@ -450,20 +392,20 @@ class AsyncIncrementSuccess implements CounterActions {
       _$AsyncIncrementSuccessCopyWithImpl<AsyncIncrementSuccess>(this, _$identity);
 
   @override
-bool operator ==(Object other) {
-return identical(this, other) ||
-(other.runtimeType == runtimeType &&
-other is AsyncIncrementSuccess &&
-(identical(other.newCount, newCount) || other.newCount == newCount));
-}
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AsyncIncrementSuccess &&
+            (identical(other.newCount, newCount) || other.newCount == newCount));
+  }
 
   @override
   int get hashCode => Object.hash(runtimeType, newCount);
 
   @override
-String toString() {
-return 'CounterActions.success(newCount: $newCount)';
-}
+  String toString() {
+    return 'CounterActions.success(newCount: $newCount)';
+  }
 }
 
 /// @nodoc
@@ -484,18 +426,18 @@ class _$AsyncIncrementSuccessCopyWithImpl<$Res> implements $AsyncIncrementSucces
   final $Res Function(AsyncIncrementSuccess) _then;
 
   /// Create a copy of CounterActions
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline')
-$Res call({Object? newCount = null}) {
-return _then(
-AsyncIncrementSuccess(
-null == newCount
-? _self.newCount
-    : newCount // ignore: cast_nullable_to_non_nullable
-as int,
-),
-);
-}
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({Object? newCount = null}) {
+    return _then(
+      AsyncIncrementSuccess(
+        null == newCount
+            ? _self.newCount
+            : newCount // ignore: cast_nullable_to_non_nullable
+                  as int,
+      ),
+    );
+  }
 }
 
 /// @nodoc
@@ -513,20 +455,20 @@ class AsyncIncrementFailed implements CounterActions {
       _$AsyncIncrementFailedCopyWithImpl<AsyncIncrementFailed>(this, _$identity);
 
   @override
-bool operator ==(Object other) {
-return identical(this, other) ||
-(other.runtimeType == runtimeType &&
-other is AsyncIncrementFailed &&
-(identical(other.error, error) || other.error == error));
-}
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is AsyncIncrementFailed &&
+            (identical(other.error, error) || other.error == error));
+  }
 
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
   @override
-String toString() {
-return 'CounterActions.failed(error: $error)';
-}
+  String toString() {
+    return 'CounterActions.failed(error: $error)';
+  }
 }
 
 /// @nodoc
@@ -547,18 +489,18 @@ class _$AsyncIncrementFailedCopyWithImpl<$Res> implements $AsyncIncrementFailedC
   final $Res Function(AsyncIncrementFailed) _then;
 
   /// Create a copy of CounterActions
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline')
-$Res call({Object? error = null}) {
-return _then(
-AsyncIncrementFailed(
-null == error
-? _self.error
-    : error // ignore: cast_nullable_to_non_nullable
-as String,
-),
-);
-}
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({Object? error = null}) {
+    return _then(
+      AsyncIncrementFailed(
+        null == error
+            ? _self.error
+            : error // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
 }
 
 /// @nodoc
@@ -572,7 +514,7 @@ class NoneTCA implements CounterActions {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {

@@ -50,43 +50,11 @@ extension CounterIntentPatterns on CounterIntent {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Increment value)? increment,
 
-    TResult
-
-  Function
-
-  (
-
-  Decrement
-
-  value
-
-  )
-
-  ?
-
-  decrement
-
-  ,
+    TResult Function(Decrement value)? decrement,
 
     TResult Function(IncrementAsync value)? incrementAsync,
 
-    TResult
-
-  Function
-
-  (
-
-  Reset
-
-  value
-
-  )
-
-  ?
-
-  reset
-
-  ,
+    TResult Function(Reset value)? reset,
 
     required TResult orElse(),
   }) {
@@ -119,24 +87,24 @@ extension CounterIntentPatterns on CounterIntent {
   /// ```
 
   @optionalTypeArgs
-TResult map<TResult extends Object?>({
-  required TResult Function(Increment value) increment,
-  required TResult Function(Decrement value) decrement,
-  required TResult Function(IncrementAsync value) incrementAsync,
-  required TResult Function(Reset value) reset,
-}) {
-  final _that = this;
-  switch (_that) {
-    case Increment():
-      return increment(_that);
-    case Decrement():
-      return decrement(_that);
-    case IncrementAsync():
-      return incrementAsync(_that);
-    case Reset():
-      return reset(_that);
+  TResult map<TResult extends Object?>({
+    required TResult Function(Increment value) increment,
+    required TResult Function(Decrement value) decrement,
+    required TResult Function(IncrementAsync value) incrementAsync,
+    required TResult Function(Reset value) reset,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case Increment():
+        return increment(_that);
+      case Decrement():
+        return decrement(_that);
+      case IncrementAsync():
+        return incrementAsync(_that);
+      case Reset():
+        return reset(_that);
+    }
   }
-}
 
   /// A variant of `map` that fallback to returning `null`.
   ///
@@ -151,26 +119,26 @@ TResult map<TResult extends Object?>({
   /// ```
 
   @optionalTypeArgs
-TResult? mapOrNull<TResult extends Object?>({
-  TResult? Function(Increment value)? increment,
-  TResult? Function(Decrement value)? decrement,
-  TResult? Function(IncrementAsync value)? incrementAsync,
-  TResult? Function(Reset value)? reset,
-}) {
-  final _that = this;
-  switch (_that) {
-    case Increment() when increment != null:
-      return increment(_that);
-    case Decrement() when decrement != null:
-      return decrement(_that);
-    case IncrementAsync() when incrementAsync != null:
-      return incrementAsync(_that);
-    case Reset() when reset != null:
-      return reset(_that);
-    case _:
-      return null;
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Increment value)? increment,
+    TResult? Function(Decrement value)? decrement,
+    TResult? Function(IncrementAsync value)? incrementAsync,
+    TResult? Function(Reset value)? reset,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case Increment() when increment != null:
+        return increment(_that);
+      case Decrement() when decrement != null:
+        return decrement(_that);
+      case IncrementAsync() when incrementAsync != null:
+        return incrementAsync(_that);
+      case Reset() when reset != null:
+        return reset(_that);
+      case _:
+        return null;
+    }
   }
-}
 
   /// A variant of `when` that fallback to an `orElse` callback.
   ///
@@ -185,58 +153,29 @@ TResult? mapOrNull<TResult extends Object?>({
   /// ```
 
   @optionalTypeArgs
-TResult maybeWhen
-<
-TResult extends Object?>(
-{
-TResult
-Function
-(
-)
-?
-increment
-,
-TResult
-Function
-(
-)
-?
-decrement
-,
-TResult
-Function
-(
-)
-?
-incrementAsync
-,
-TResult
-Function
-(
-)
-?
-reset
-,
-required
-TResult
-orElse(),
-}) {
-final _that = this;
-switch (_that) {
-case Increment() when increment != null:
-return increment();
-case Decrement() when decrement != null:
-return decrement();
-case IncrementAsync() when incrementAsync != null:
-return incrementAsync();
-case Reset() when reset != null:
-return reset();
-case _:
-return orElse();
-}
-}
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? increment,
+    TResult Function()? decrement,
+    TResult Function()? incrementAsync,
+    TResult Function()? reset,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case Increment() when increment != null:
+        return increment();
+      case Decrement() when decrement != null:
+        return decrement();
+      case IncrementAsync() when incrementAsync != null:
+        return incrementAsync();
+      case Reset() when reset != null:
+        return reset();
+      case _:
+        return orElse();
+    }
+  }
 
-/// A `switch`-like method, using callbacks.
+  /// A `switch`-like method, using callbacks.
 ///
 /// As opposed to `map`, this offers destructuring.
 /// It is equivalent to doing:
@@ -282,26 +221,26 @@ return orElse();
   /// ```
 
   @optionalTypeArgs
-TResult? whenOrNull<TResult extends Object?>({
-TResult? Function()? increment,
-TResult? Function()? decrement,
-TResult? Function()? incrementAsync,
-TResult? Function()? reset,
-}) {
-final _that = this;
-switch (_that) {
-case Increment() when increment != null:
-return increment();
-case Decrement() when decrement != null:
-return decrement();
-case IncrementAsync() when incrementAsync != null:
-return incrementAsync();
-case Reset() when reset != null:
-return reset();
-case _:
-return null;
-}
-}
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? increment,
+    TResult? Function()? decrement,
+    TResult? Function()? incrementAsync,
+    TResult? Function()? reset,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case Increment() when increment != null:
+        return increment();
+      case Decrement() when decrement != null:
+        return decrement();
+      case IncrementAsync() when incrementAsync != null:
+        return incrementAsync();
+      case Reset() when reset != null:
+        return reset();
+      case _:
+        return null;
+    }
+  }
 }
 
 /// @nodoc
@@ -315,7 +254,7 @@ class Increment implements CounterIntent {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {
@@ -334,7 +273,7 @@ class Decrement implements CounterIntent {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {
@@ -353,7 +292,7 @@ class IncrementAsync implements CounterIntent {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {
@@ -372,7 +311,7 @@ class Reset implements CounterIntent {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {
@@ -388,7 +327,7 @@ mixin _$CounterEffect {
   }
 
   @override
-int get hashCode => runtimeType.hashCode;
+  int get hashCode => runtimeType.hashCode;
 
   @override
   String toString() {
@@ -416,37 +355,37 @@ extension CounterEffectPatterns on CounterEffect {
   /// ```
 
   @optionalTypeArgs
-TResult maybeMap<TResult extends Object?>({
-TResult Function(ShowToast value)? showToast,
-TResult Function(NavigateTo value)? navigateTo,
-TResult Function(PlaySound value)? playSound,
-required TResult orElse(),
-}) {
-final _that = this;
-switch (_that) {
-case ShowToast() when showToast != null:
-return showToast(_that);
-case NavigateTo() when navigateTo != null:
-return navigateTo(_that);
-case PlaySound() when playSound != null:
-return playSound(_that);
-case _:
-return orElse();
-}
-}
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ShowToast value)? showToast,
+    TResult Function(NavigateTo value)? navigateTo,
+    TResult Function(PlaySound value)? playSound,
+    required TResult orElse(),
+  }) {
+    final _that = this;
+    switch (_that) {
+      case ShowToast() when showToast != null:
+        return showToast(_that);
+      case NavigateTo() when navigateTo != null:
+        return navigateTo(_that);
+      case PlaySound() when playSound != null:
+        return playSound(_that);
+      case _:
+        return orElse();
+    }
+  }
 
-/// A `switch`-like method, using callbacks.
-///
-/// Callbacks receives the raw object, upcasted.
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case final Subclass value:
-///     return ...;
-///   case final Subclass2 value:
-///     return ...;
-/// }
-/// ```
+  /// A `switch`-like method, using callbacks.
+  ///
+  /// Callbacks receives the raw object, upcasted.
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case final Subclass value:
+  ///     return ...;
+  ///   case final Subclass2 value:
+  ///     return ...;
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
@@ -478,35 +417,35 @@ return orElse();
   /// ```
 
   @optionalTypeArgs
-TResult? mapOrNull<TResult extends Object?>({
-TResult? Function(ShowToast value)? showToast,
-TResult? Function(NavigateTo value)? navigateTo,
-TResult? Function(PlaySound value)? playSound,
-}) {
-final _that = this;
-switch (_that) {
-case ShowToast() when showToast != null:
-return showToast(_that);
-case NavigateTo() when navigateTo != null:
-return navigateTo(_that);
-case PlaySound() when playSound != null:
-return playSound(_that);
-case _:
-return null;
-}
-}
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ShowToast value)? showToast,
+    TResult? Function(NavigateTo value)? navigateTo,
+    TResult? Function(PlaySound value)? playSound,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case ShowToast() when showToast != null:
+        return showToast(_that);
+      case NavigateTo() when navigateTo != null:
+        return navigateTo(_that);
+      case PlaySound() when playSound != null:
+        return playSound(_that);
+      case _:
+        return null;
+    }
+  }
 
-/// A variant of `when` that fallback to an `orElse` callback.
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return orElse();
-/// }
-/// ```
+  /// A variant of `when` that fallback to an `orElse` callback.
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return orElse();
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
@@ -542,33 +481,33 @@ return null;
   /// ```
 
   @optionalTypeArgs
-TResult when<TResult extends Object?>({
-required TResult Function(String message) showToast,
-required TResult Function(String route) navigateTo,
-required TResult Function(String soundAsset) playSound,
-}) {
-final _that = this;
-switch (_that) {
-case ShowToast():
-return showToast(_that.message);
-case NavigateTo():
-return navigateTo(_that.route);
-case PlaySound():
-return playSound(_that.soundAsset);
-}
-}
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message) showToast,
+    required TResult Function(String route) navigateTo,
+    required TResult Function(String soundAsset) playSound,
+  }) {
+    final _that = this;
+    switch (_that) {
+      case ShowToast():
+        return showToast(_that.message);
+      case NavigateTo():
+        return navigateTo(_that.route);
+      case PlaySound():
+        return playSound(_that.soundAsset);
+    }
+  }
 
-/// A variant of `when` that fallback to returning `null`
-///
-/// It is equivalent to doing:
-/// ```dart
-/// switch (sealedClass) {
-///   case Subclass(:final field):
-///     return ...;
-///   case _:
-///     return null;
-/// }
-/// ```
+  /// A variant of `when` that fallback to returning `null`
+  ///
+  /// It is equivalent to doing:
+  /// ```dart
+  /// switch (sealedClass) {
+  ///   case Subclass(:final field):
+  ///     return ...;
+  ///   case _:
+  ///     return null;
+  /// }
+  /// ```
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
@@ -605,20 +544,20 @@ class ShowToast implements CounterEffect {
       _$ShowToastCopyWithImpl<ShowToast>(this, _$identity);
 
   @override
-bool operator ==(Object other) {
-return identical(this, other) ||
-(other.runtimeType == runtimeType &&
-other is ShowToast &&
-(identical(other.message, message) || other.message == message));
-}
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is ShowToast &&
+            (identical(other.message, message) || other.message == message));
+  }
 
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
   @override
-String toString() {
-return 'CounterEffect.showToast(message: $message)';
-}
+  String toString() {
+    return 'CounterEffect.showToast(message: $message)';
+  }
 }
 
 /// @nodoc
@@ -637,18 +576,18 @@ class _$ShowToastCopyWithImpl<$Res> implements $ShowToastCopyWith<$Res> {
   final $Res Function(ShowToast) _then;
 
   /// Create a copy of CounterEffect
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline')
-$Res call({Object? message = null}) {
-return _then(
-ShowToast(
-null == message
-? _self.message
-    : message // ignore: cast_nullable_to_non_nullable
-as String,
-),
-);
-}
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({Object? message = null}) {
+    return _then(
+      ShowToast(
+        null == message
+            ? _self.message
+            : message // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
 }
 
 /// @nodoc
@@ -666,20 +605,20 @@ class NavigateTo implements CounterEffect {
       _$NavigateToCopyWithImpl<NavigateTo>(this, _$identity);
 
   @override
-bool operator ==(Object other) {
-return identical(this, other) ||
-(other.runtimeType == runtimeType &&
-other is NavigateTo &&
-(identical(other.route, route) || other.route == route));
-}
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is NavigateTo &&
+            (identical(other.route, route) || other.route == route));
+  }
 
   @override
   int get hashCode => Object.hash(runtimeType, route);
 
   @override
-String toString() {
-return 'CounterEffect.navigateTo(route: $route)';
-}
+  String toString() {
+    return 'CounterEffect.navigateTo(route: $route)';
+  }
 }
 
 /// @nodoc
@@ -698,18 +637,18 @@ class _$NavigateToCopyWithImpl<$Res> implements $NavigateToCopyWith<$Res> {
   final $Res Function(NavigateTo) _then;
 
   /// Create a copy of CounterEffect
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline')
-$Res call({Object? route = null}) {
-return _then(
-NavigateTo(
-null == route
-? _self.route
-    : route // ignore: cast_nullable_to_non_nullable
-as String,
-),
-);
-}
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({Object? route = null}) {
+    return _then(
+      NavigateTo(
+        null == route
+            ? _self.route
+            : route // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
 }
 
 /// @nodoc
@@ -727,20 +666,20 @@ class PlaySound implements CounterEffect {
       _$PlaySoundCopyWithImpl<PlaySound>(this, _$identity);
 
   @override
-bool operator ==(Object other) {
-return identical(this, other) ||
-(other.runtimeType == runtimeType &&
-other is PlaySound &&
-(identical(other.soundAsset, soundAsset) || other.soundAsset == soundAsset));
-}
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is PlaySound &&
+            (identical(other.soundAsset, soundAsset) || other.soundAsset == soundAsset));
+  }
 
   @override
   int get hashCode => Object.hash(runtimeType, soundAsset);
 
   @override
-String toString() {
-return 'CounterEffect.playSound(soundAsset: $soundAsset)';
-}
+  String toString() {
+    return 'CounterEffect.playSound(soundAsset: $soundAsset)';
+  }
 }
 
 /// @nodoc
@@ -759,16 +698,16 @@ class _$PlaySoundCopyWithImpl<$Res> implements $PlaySoundCopyWith<$Res> {
   final $Res Function(PlaySound) _then;
 
   /// Create a copy of CounterEffect
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline')
-$Res call({Object? soundAsset = null}) {
-return _then(
-PlaySound(
-null == soundAsset
-? _self.soundAsset
-    : soundAsset // ignore: cast_nullable_to_non_nullable
-as String,
-),
-);
-}
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  $Res call({Object? soundAsset = null}) {
+    return _then(
+      PlaySound(
+        null == soundAsset
+            ? _self.soundAsset
+            : soundAsset // ignore: cast_nullable_to_non_nullable
+                  as String,
+      ),
+    );
+  }
 }
