@@ -1,7 +1,7 @@
 name: bloc_arch_flow
 description: "A Bloc extension package to easily implement TCA or MVI architecture with Bloc using fpdart."
-version: 0.0.1
-homepage: ''
+repository: https://github.com/minhuits/bloc_arch_flow
+version: 1.0.0
 
 environment:
   sdk: ^3.9.2
