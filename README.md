@@ -1,40 +1,124 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+[한국어](README-ko.md) | [English](README.md)
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
+---
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
+# Bloc Architecture Flow (bloc_arch_flow)
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+`bloc_arch_flow` is a Dart package that extends Flutter's BLoC (Business Logic Component) pattern by integrating
+predictable architectural patterns like **MVI (Model-View-Intent)** or **TCA (The Composable Architecture)**. This
+package helps structure state management logic and makes it easier to test.
 
-## Features
+---
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## 🚀 Key Features
 
-## Getting started
+### 1. MVI (Model-View-Intent) Pattern Support
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+The `BlocArchMvi` abstract class helps you manage **one-off side effects (Effects)** separately from the **state**. For
+example, you can handle UI actions like showing a snackbar or navigating to a new screen independently from state
+changes, which clearly separates UI and business logic.
 
-## Usage
+* `mviEffects`: A stream for the UI to subscribe to and process side effects.
+* `mviEmitEffect`: A method to emit a side effect through the `mviEffects` stream.
+* `mviPerformTaskEither`: A utility that uses `fpdart`'s `TaskEither` to handle the success and failure of asynchronous
+  operations in a clean, functional way.
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+### 2. TCA (The Composable Architecture) Pattern Support
 
-```dart
+The `BlocArchTca` abstract class enables a **purely functional reducer**-based architecture. All business logic is
+defined within the reducer, which creates a predictable and easily testable state flow.
 
-const like = 'sample';
+* `tcaReducer`: A pure function that processes an **action** and returns a new state and a side effect.
+* `tcaPerformEffect`: A utility that uses `TaskEither` to execute an asynchronous side effect and re-injects the result
+  back into the system as a new action.
+
+### 3. Automated Testing (`BlocTestSuite`)
+
+`BlocTestSuite` is an abstract class for BLoC/Cubit testing. It automates test environment setups like `setUp` and
+`tearDown`, making your test code more concise and reusable.
+
+* `initTestSuite()`: Automatically performs test suite initialization and cleanup tasks.
+* `blocArchTest()`: A wrapper for `bloc_test` that simplifies test environment setup.
+
+---
+
+## 📦 Installation
+
+Add the following dependencies to your `pubspec.yaml` file.
+
+```yaml
+dependencies:
+  bloc_arch_flow: ^1.0.0
+  bloc: ^8.1.0
+  flutter_bloc: ^8.1.1
+  fpdart: ^1.0.0
+
+dev_dependencies:
+  bloc_test: ^9.0.0
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.0.0
+  mocktail: ^0.3.0
+  build_runner: ^2.1.0
+  freezed: ^2.0.0
 ```
 
-## Additional information
+## 📖 Usage
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+### MVI (Model-View-Intent)
+
+```dart
+// MVI pattern applied to a BLoC example
+class CounterMviBloc extends BlocArchMvi<CounterIntentMVI, CounterState, CounterEffect> {
+  CounterMviBloc(super.initialState);
+
+  @override
+  Future<void> mviHandleIntent(CounterIntentMVI intent, Emitter<CounterState> stateEmitter) {
+    // Implement intent handling logic here
+  }
+}
+```
+
+### TCA (The Composable Architecture)
+
+```dart
+// TCA pattern applied to a BLoC example
+class CounterTcaBloc extends BlocArchTca<CounterActions, CounterState, CounterEnvironment> {
+  CounterTcaBloc(super.initialState, super.environment);
+
+  @override
+  ReducerEffect<CounterState, CounterActions> tcaReducer(CounterActions action,
+      CounterState currentState,
+      CounterEnvironment environment,) {
+    // Implement reducer logic here
+    return (newState: currentState, effect: TaskEither.right(CounterActions.none()));
+  }
+}
+```
+
+### Test Suite
+
+```dart
+// Test code using BlocTestSuite
+class CounterMviBlocTestSuite
+    extends BlocTestSuite<CounterMviBloc, CounterState, CounterIntentMVI, CounterEnvironment> {
+  @override
+  CounterMviBloc buildBloc(CounterEnvironment environment) => CounterMviBloc(environment);
+
+  @override
+  CounterEnvironment buildEnvironment() => MockCounterEnvironment();
+}
+
+void main() {
+  final testSuite = CounterMviBlocTestSuite();
+
+  group('CounterMviBloc', () {
+    testSuite.initTestSuite();
+
+    testSuite.blocArchTest(
+      'incrementAsync success should update count and set isLoading to false',
+      // ... test logic
+    );
+  });
+}
+```
