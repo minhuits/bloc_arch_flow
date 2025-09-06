@@ -1,4 +1,4 @@
-[한국어](README-ko.md) | [English](README.md)
+[한국어](https://github.com/minhuits/bloc_arch_flow/blob/master/README-ko.md) | [English](https://github.com/minhuits/bloc_arch_flow/blob/master/README.md)
 
 ---
 
