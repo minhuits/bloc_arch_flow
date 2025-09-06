@@ -4,8 +4,8 @@
 
 # Bloc Architecture Flow (bloc_arch_flow)
 
-`bloc_arch_flow`는 Flutter의 BLoC(Business Logic Component) 패턴을 확장하여 **MVI (Model-View-Intent)** 또는 **TCA (The Composable
-Architecture)**와 같은 예측 가능한 아키텍처 패턴을 통합하는 Dart 패키지입니다. 이 패키지는 상태 관리 로직을 더욱 구조화하고 테스트하기 쉽게 만듭니다.
+`bloc_arch_flow`는 Flutter의 BLoC(Business Logic Component) 패턴을 확장하여 **MVI (Model-View-Intent)** 또는
+**TCA (The Composable Architecture)** 와 같은 예측 가능한 아키텍처 패턴을 통합하는 Dart 패키지입니다. 이 패키지는 상태 관리 로직을 더욱 구조화하고 테스트하기 쉽게 만듭니다.
 
 ---
 
@@ -13,7 +13,7 @@ Architecture)**와 같은 예측 가능한 아키텍처 패턴을 통합하는 D
 
 ### 1. MVI (Model-View-Intent) 패턴 지원
 
-`BlocArchMvi` 추상 클래스를 통해 **상태(State)**와 분리된 **일회성 부수 효과(Effect)**를 관리할 수 있습니다. 예를 들어, `showSnackbar`나 `MapsTo`와 같은 UI
+`BlocArchMvi` 추상 클래스를 통해 **상태(State)** 와 분리된 **일회성 부수 효과(Effect)** 를 관리할 수 있습니다. 예를 들어, `showSnackbar`나 `MapsTo`와 같은 UI
 동작을 상태 변경과 별도로 처리하여, UI와 비즈니스 로직을 명확하게 분리합니다.
 
 * `mviEffects`: UI가 구독하여 부수 효과를 처리하는 스트림입니다.
@@ -25,7 +25,7 @@ Architecture)**와 같은 예측 가능한 아키텍처 패턴을 통합하는 D
 `BlocArchTca` 추상 클래스를 통해 **순수 함수형 리듀서(Reducer)** 기반의 아키텍처를 구현할 수 있습니다. 모든 비즈니스 로직이 리듀서에 정의되어, 예측 가능하고 테스트가 용이한 상태 흐름을
 만듭니다.
 
-* `tcaReducer`: **액션(Action)**을 처리하고 새로운 상태와 부수 효과를 반환하는 순수 함수입니다.
+* `tcaReducer`: **액션(Action)** 을 처리하고 새로운 상태와 부수 효과를 반환하는 순수 함수입니다.
 * `tcaPerformEffect`: `TaskEither`를 사용하여 비동기 부수 효과를 실행하고, 그 결과를 다시 액션으로 시스템에 주입합니다.
 
 ### 3. 테스트 자동화 (`BlocTestSuite`)
@@ -43,19 +43,20 @@ Architecture)**와 같은 예측 가능한 아키텍처 패턴을 통합하는 D
 
 ```yaml
 dependencies:
-  bloc_arch_flow: ^1.0.0
-  bloc: ^8.1.0
-  flutter_bloc: ^8.1.1
-  fpdart: ^1.0.0
+  freezed_annotation: ^3.1.0
+  fpdart: ^1.1.1
+  flutter_bloc: ^9.1.1
+  bloc: ^9.0.0
+  bloc_arch_flow: ^1.0.3
 
 dev_dependencies:
-  bloc_test: ^9.0.0
   flutter_test:
     sdk: flutter
-  mockito: ^5.0.0
-  mocktail: ^0.3.0
-  build_runner: ^2.1.0
-  freezed: ^2.0.0
+
+  freezed: ^3.2.0
+  build_runner: ^2.6.0
+  bloc_test: ^10.0.0
+  mocktail: ^1.0.4
 ```
 
 ## 📖 사용법
@@ -64,11 +65,11 @@ dev_dependencies:
 
 ```dart
 // MVI 패턴을 적용한 BLoC 예제
-class CounterMviBloc extends BlocArchMvi<CounterIntentMVI, CounterState, CounterEffect> {
+class CounterMviBloc extends BlocArchMvi<CounterIntent, CounterState, CounterEffect> {
   CounterMviBloc(super.initialState);
 
   @override
-  Future<void> mviHandleIntent(CounterIntentMVI intent, Emitter<CounterState> stateEmitter) {
+  Future<void> mviHandleIntent(CounterIntent intent, Emitter<CounterState> stateEmitter) {
     // Intent 처리 로직을 여기에 구현
   }
 }
@@ -82,9 +83,11 @@ class CounterTcaBloc extends BlocArchTca<CounterActions, CounterState, CounterEn
   CounterTcaBloc(super.initialState, super.environment);
 
   @override
-  ReducerEffect<CounterState, CounterActions> tcaReducer(CounterActions action,
-      CounterState currentState,
-      CounterEnvironment environment,) {
+  ReducerEffect<CounterState, CounterActions> tcaReducer(
+    CounterActions action,
+    CounterState currentState,
+    CounterEnvironment environment,
+  ) {
     // Reducer 로직을 여기에 구현
     return (newState: currentState, effect: TaskEither.right(CounterActions.none()));
   }
@@ -96,7 +99,7 @@ class CounterTcaBloc extends BlocArchTca<CounterActions, CounterState, CounterEn
 ```dart
 // BlocTestSuite를 사용한 테스트 코드
 class CounterMviBlocTestSuite
-    extends BlocTestSuite<CounterMviBloc, CounterState, CounterIntentMVI, CounterEnvironment> {
+    extends BlocTestSuite<CounterMviBloc, CounterState, CounterIntent, CounterEnvironment> {
   @override
   CounterMviBloc buildBloc(CounterEnvironment environment) => CounterMviBloc(environment);
 

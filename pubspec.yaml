@@ -1,7 +1,10 @@
 name: bloc_arch_flow
 description: "A Bloc extension package to easily implement TCA or MVI architecture with Bloc using fpdart."
 repository: https://github.com/minhuits/bloc_arch_flow
-version: 1.0.2
+version: 1.0.3
+topics:
+  - tca
+  - mvi
 
 environment:
   sdk: ^3.9.2
@@ -23,5 +26,5 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^6.0.0
-  build_runner: ^2.6.0
+  build_runner: ^2.7.0
   freezed: ^3.2.0

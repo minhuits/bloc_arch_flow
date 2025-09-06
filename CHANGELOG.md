@@ -1,3 +1,13 @@
+## 1.0.3
+
+### Style
+
+Refactored Dart code formatting for consistency.
+
+### Docs
+
+Fixed incorrect documentation.
+
 ## 1.0.2
 
 ### Style
