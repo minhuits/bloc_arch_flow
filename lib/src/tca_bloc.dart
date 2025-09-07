@@ -1,123 +1,247 @@
-import 'package:bloc/bloc.dart' show Bloc;
-import 'package:flutter/foundation.dart' show protected;
+import 'package:bloc/bloc.dart' show Bloc, Cubit, Emitter;
 import 'package:fpdart/fpdart.dart' show TaskEither;
+import 'package:meta/meta.dart' show protected;
 
-/// Typedef for defining the result returned by a TCA Reducer.
-/// This typedef is a record type that includes a new [State] and an [effect]
-/// representing an asynchronous operation.
-/// - [newState]: The new Bloc [State] calculated after processing an action.
-/// - [effect]: An [effect] of type [TaskEither<Object, Action>], representing a side effect.
-///   If the effect succeeds, it returns an [Action] that can be re-injected into the system;
-///   if it fails, it returns an error of type [Object].
-///---
-/// TCA 리듀서가 반환하는 결과를 정의하는 typedef입니다.
-/// 이 typedef는 새로운 [State]와 함께 비동기 작업을 나타내는 [effect]를 포함하는 레코드 타입입니다.
-/// - [newState]: 액션 처리 후 계산된 새로운 Bloc의 상태입니다.
-/// - [effect]: [TaskEither<Object, Action>] 타입으로, 부수 효과를 나타냅니다.
-///   이펙트가 성공하면 [Action]을 반환하여 시스템에 다시 주입될 수 있고,
-///   실패하면 [Object] 타입의 오류를 반환합니다.
-typedef ReducerEffect<State, Action> = ({State newState, TaskEither<Object, Action> effect});
+/// Represents a composable side effect with `fpdart`.
+///
+/// It's a [TaskEither] that handles a potentially failing asynchronous operation.
+///
+/// - **Right (Success):** The type of action to be dispatched upon successful completion.
+/// - **Left (Failure):** An `Object` representing a non-recoverable error.
+///
+/// ---
+///
+/// `fpdart`를 이용한 컴포저블 부수 효과를 나타냅니다.
+///
+/// 실패할 수 있는 비동기 작업을 처리하는 [TaskEither]입니다.
+///
+/// - **Right (성공):** 작업 성공 시 디스패치할 액션의 타입.
+/// - **Left (실패):** 복구 불가능한 오류를 나타내는 `Object` 타입.
+///
+typedef TcaEffect<A> = TaskEither<Object, A>;
 
-/// Abstract base class for applying the TCA (The Composable Architecture) pattern to Bloc.
-/// This class focuses on a pure functional reducer approach centered around [fpdart].
-/// - [Action]: Corresponds to a Bloc [Event], representing user or system actions.
-/// - [State]: Represents the Bloc's state.
-/// - [Environment]: A container for managing dependencies required by the business logic
-///   (e.g., API services, databases).
-///---
-/// Bloc과 함께 TCA (The Composable Architecture) 패턴을 적용하기 위한 추상 클래스입니다.
-/// 이 클래스는 [fpdart]를 중심으로 하는 순수 함수형 리듀서 접근 방식에 중점을 둡니다.
-/// - [Action]: 사용자 또는 시스템의 행동을 나타내는 Bloc의 [Event]에 해당합니다.
-/// - [State]: Bloc의 상태를 나타냅니다.
-/// - [Environment]: 비즈니스 로직에 필요한 의존성(예: API 서비스, 데이터베이스)을 관리하는 컨테이너입니다.
-abstract class BlocArchTca<Action, State, Environment> extends Bloc<Action, State> {
-  /// Environment dependency to be used in the reducer.
-  /// It is injected when the Bloc is initialized via this constructor.
+/// Represents the result from a TCA-style reducer.
+///
+/// This type bundles the new state derived from an action and an optional side effect.
+///
+/// - [newState]: The updated state calculated by the reducer.
+/// - [effect]: A side effect defined as a [TcaEffect] to be executed after the state change.
+///
+/// ---
+///
+/// TCA 스타일 리듀서의 결과를 나타냅니다.
+///
+/// 액션으로부터 도출된 새로운 상태와 선택적인 부수 효과를 묶는 타입입니다.
+///
+/// - [newState]: 리듀서에 의해 계산된 업데이트된 상태.
+/// - [effect]: 상태 변경 후 실행될 [TcaEffect]로 정의된 부수 효과.
+///
+typedef ReducerEffect<S, A> = ({TcaEffect<A> effect, S newState});
+
+/// A mixin that provides core TCA-like functionality to both [Bloc] and [Cubit].
+///
+/// It encapsulates the pure reducer logic and the mechanism for building side effects,
+/// abstracting them away from the state management framework's boilerplate.
+///
+/// - [A]: The Action type, which represents all possible user or system events.
+/// - [S]: The State type, representing the UI state.
+/// - [E]: The Environment type, holding all dependencies (e.g., API clients, databases).
+///
+/// ---
+///
+/// [Bloc]와 [Cubit]에 TCA의 핵심 기능을 제공하는 믹스인입니다.
+///
+/// 순수 리듀서 로직과 부수 효과를 생성하는 메커니즘을 캡슐화하여,
+/// 상태 관리 프레임워크의 반복적인 코드로부터 분리합니다.
+///
+/// - [A]: 모든 가능한 사용자 또는 시스템 이벤트를 나타내는 액션 타입.
+/// - [S]: UI 상태를 나타내는 상태 타입.
+/// - [E]: 모든 의존성(예: API 클라이언트, 데이터베이스)을 담는 환경 타입.
+///
+mixin TcaMixin<A, S, E> {
+  /// A pure utility to build a side effect with `fpdart`'s [TaskEither].
+  ///
+  /// This function takes a potentially failing asynchronous `task` and transforms its
+  /// success or failure into a unified `TcaEffect` that returns an action `A`.
+  /// The returned effect is a pure definition of the side effect, not its execution.
+  ///
+  /// **Core Logic:**
+  /// 1.  Transforms the `Success` value of the input `task` into an action `A` using `onSuccess`.
+  /// 2.  Transforms the `Failure` value into an action `A` using `onFailure`.
+  /// 3.  Uses `.orElse()` to convert a failed task into a successful one (with an action).
+  ///
+  /// - [task]: The raw asynchronous operation, returning `Success` or `Failure`.
+  /// - [onSuccess]: A callback to map a successful `Success` value to an action `A`.
+  /// - [onFailure]: A callback to map a failed `Failure` value to an action `A`.
+  /// - **Returns:** A [TcaEffect] that, upon execution, will yield an action `A` regardless of the original task's outcome.
+  ///
   /// ---
-  /// 리듀서에서 사용될 환경(Environment) 종속성입니다.
-  /// 이 생성자를 통해 Bloc이 초기화될 때 주입됩니다.
-  final Environment environment;
-
-  /// Constructor for [BlocArchTca].
-  /// Calls the super [Bloc] class constructor to set the initial state and inject the environment.
-  /// ---
-  /// [BlocArchTca]의 생성자입니다.
-  /// 상위 [Bloc] 클래스의 생성자를 호출하여 초기 상태를 설정하고 환경을 주입합니다.
-  BlocArchTca(super.initialState, this.environment);
-
-  /// A utility function using [fpdart]'s [TaskEither] to process asynchronous operations
-  /// and transform their results back into an [Action].
-  /// This function itself is pure. It only defines *what* effect (asynchronous operation) to perform and *how*
-  /// to map its success or failure to an [Action].
-  /// It does not directly execute the effect or update the Bloc's state.
-  /// - [task]: The asynchronous operation to execute. ([L] is the failure type, [R] is the success type).
-  /// - [onSuccess]: A callback function invoked when [task] completes successfully.
-  ///   It should receive the success value ([R]) and return an [Action] corresponding to that success.
-  /// - [onFailure]: A callback function invoked when [task] fails.
-  ///   It should receive the failure value ([L]) and return an [Action] or [Object] (error) corresponding to that failure.
-  /// This function is useful for defining asynchronous operations within the [tcaReducer]
-  /// and transforming their outcomes back into Bloc [Action]s for re-injection into the system.
-  /// ---
-  /// [fpdart]의 [TaskEither]를 사용하여 비동기 작업을 처리하고 그 결과를 다시 [Action]으로 변환하는 유틸리티 함수입니다.
-  /// 이 함수 자체는 순수합니다. 단지 *어떤* 효과(비동기 작업)를 수행하고
-  /// 해당 작업의 성공 또는 실패를 *어떻게* [Action]으로 매핑할지 정의할 뿐입니다.
-  /// 직접 효과를 실행하거나 Bloc의 상태를 업데이트하지 않습니다.
-  /// - [task]: 실행할 비동기 작업입니다. ([L]은 실패 타입, [R]은 성공 타입).
-  /// - [onSuccess]: [task]가 성공적으로 완료되었을 때 호출되는 콜백 함수입니다.
-  ///   성공 값([R])을 받아 해당 성공에 대응하는 [Action]을 반환해야 합니다.
-  /// - [onFailure]: [task]가 실패했을 때 호출되는 콜백 함수입니다.
-  ///   실패 값([L])을 받아 해당 실패에 대응하는 [Action] 또는 [Object] (오류)를 반환해야 합니다.
-  /// 이 함수는 [tcaReducer] 내부에서 비동기 작업을 정의하고 그 결과를 다시 Bloc의 [Action]으로
-  /// 주입할 때 유용합니다.
+  ///
+  /// `fpdart`의 [TaskEither]로 부수 효과를 만드는 순수 유틸리티입니다.
+  ///
+  /// 이 함수는 잠재적으로 실패할 수 있는 비동기 `task`를 받아, 그 성공 또는 실패를
+  /// 액션 `A`를 반환하는 통합된 `TcaEffect`로 변환합니다.
+  /// 반환되는 효과는 부수 효과의 실행이 아닌, 순수한 정의일 뿐입니다.
+  ///
+  /// **핵심 로직:**
+  /// 1. 입력 `task`의 `Success` 값을 `onSuccess`를 이용해 액션 `A`로 변환합니다.
+  /// 2. `Failure` 값을 `onFailure`를 이용해 액션 `A`로 변환합니다.
+  /// 3. `.orElse()`를 사용하여 실패한 태스크를 (액션과 함께) 성공적인 태스크로 변환합니다.
+  ///
+  /// - [task]: `Success` 또는 `Failure`를 반환하는 비동기 작업.
+  /// - [onSuccess]: 성공적인 `Success` 값을 액션 `A`로 매핑하는 콜백.
+  /// - [onFailure]: 실패한 `Failure` 값을 액션 `A`로 매핑하는 콜백.
+  /// - **반환:** 원래 태스크의 결과와 상관없이 실행 시 액션 `A`를 생성하는 [TcaEffect].
+  ///
   @protected
-  TaskEither<L, Action> tcaPerformEffect<L, R>({
-    required TaskEither<L, R> task,
-    required Action Function(R successValue) onSuccess,
-    required L Function(L failureValue) onFailure,
+  TcaEffect<A> tcaEffectBuilder<Failure, Success>({
+    required TaskEither<Failure, Success> task,
+    required A Function(Success success) onSuccess,
+    required A Function(Failure failure) onFailure,
   }) {
-    return task.map(onSuccess).mapLeft(onFailure);
+    // 1. 성공 케이스를 먼저 map을 이용해 변환합니다.
+    final TaskEither<Failure, A> success = task.map(onSuccess);
+
+    // 2. 실패 시 실행될 로직을 변수로 정의합니다.
+    TcaEffect<A> onTaskFailure(Failure failure) {
+      final A action = onFailure(failure);
+      return TcaEffect.right(action);
+    }
+
+    // 3. orElse 메서드에 정의된 함수를 전달하여 효과를 만듭니다.
+    final TcaEffect<A> effect = success.orElse(onTaskFailure);
+
+    return effect;
   }
 
-  /// An abstract function that processes an [Action], calculates a new state,
-  /// and returns a side effect if necessary.
-  /// This function plays a similar role to TCA's Reducer and is designed as a **pure function**.
-  /// The reducer takes the current [Action], [currentState], and [environment] as input,
-  /// and deterministically returns a new [State] and a [ReducerEffect] defining the [Effect] to be executed.
-  /// **How it works:**
-  /// 1. [tcaReducer] is called from within Bloc's `on<Action>` handler.
-  /// 2. The `newState` from the returned `ReducerEffect` is used to update the Bloc's state
-  ///    via `emit` within the `on<Action>` handler.
-  /// 3. The `effect` ([TaskEither]) from the returned `ReducerEffect` is executed *after* the new state is emitted.
-  /// 4. If the [Effect] succeeds, it returns an [Action] which can then be `add`ed back to the Bloc,
-  ///    completing the action chaining cycle.
-  /// **Important Considerations:**
-  /// `emit` is NOT passed directly to this [tcaReducer].
-  /// State transformation is done by returning `newState`,
-  /// and the actual `emit` call occurs in the `on<Action>` handler after the reducer returns.
-  /// This aligns with the pure functional nature of TCA reducers and maximizes testability.
+  /// An abstract **pure function** that processes an action and returns a new state and effect.
+  ///
+  /// This is the core reducer logic, completely separate from the state management framework.
+  /// It should contain no side effects, only pure business logic.
+  ///
+  /// - [action]: The action to process.
+  /// - [state]: The current state of the BLoC/Cubit.
+  /// - [environment]: The dependencies needed for the business logic.
+  /// - **Returns:** A [ReducerEffect] containing the next state and a side effect.
+  ///
   /// ---
-  /// [Action]을 처리하고 새로운 상태를 계산하며, 필요한 경우 부수 효과를 반환하는 추상 함수입니다.
-  /// 이 함수는 TCA의 Reducer와 유사한 역할을 하며 **순수 함수**로 설계됩니다.
-  /// 리듀서는 현재 [Action], [currentState], [environment]를 입력으로 받아,
-  /// 결정론적으로 새로운 [State]와 실행될 [Effect]를 정의하는 [ReducerEffect]를 반환합니다.
-  /// **작동 방식:**
-  /// 1. [tcaReducer]는 Bloc의 `on<Action>` 핸들러 내부에서 호출됩니다.
-  /// 2. 반환된 `ReducerEffect`의 `newState`는 `on<Action>` 핸들러에서 `emit`을 통해 Bloc의 상태를 업데이트하는 데 사용됩니다.
-  /// 3. 반환된 `ReducerEffect`의 `effect` ([TaskEither])는 새로운 상태가 방출된 *후* 실행됩니다.
-  /// 4. [Effect]가 성공하면 [Action]을 반환하며, 이 [Action]은 다시 Bloc에 `add`되어 액션 순환(action chaining)이 이루어집니다.
-  /// **중요 고려사항:**
-  /// `emit`은 이 [tcaReducer]에 직접 전달되지 않습니다. 상태 변환은 `newState`를 반환함으로써 이루어지며,
-  /// 실제 `emit` 호출은 리듀서가 반환된 후 `on<Action>` 핸들러에서 발생합니다. 이는 TCA 리듀서의
-  /// 순수 함수적 특성과 일치하며 테스트 용이성을 극대화합니다.
-  ReducerEffect<State, Action> tcaReducer(
-    Action action,
-    State currentState,
-    Environment environment,
-  );
+  ///
+  /// 액션을 처리하고 새로운 상태와 효과를 반환하는 추상적 **순수 함수**입니다.
+  ///
+  /// 상태 관리 프레임워크와 완벽하게 분리된 핵심 리듀서 로직입니다.
+  /// 부수 효과 없이 오직 순수 비즈니스 로직만 포함해야 합니다.
+  ///
+  /// - [action]: 처리할 액션.
+  /// - [state]: BLoC/Cubit의 현재 상태.
+  /// - [environment]: 비즈니스 로직에 필요한 의존성.
+  /// - **반환:** 다음 상태와 부수 효과를 담은 [ReducerEffect].
+  ///
+  @protected
+  ReducerEffect<S, A> tcaReducer(A action, S state, E environment);
+}
 
-  /// Calls the [close] method of the super [Bloc] class to complete resource cleanup when the Bloc is closed.
+/// An abstract base class that applies the TCA pattern to [Bloc].
+/// It provides a consistent entry point for handling actions and delegates to a pure reducer.
+///
+/// - [A]: Action type.
+/// - [S]: State type.
+/// - [E]: Environment type.
+///
+/// ---
+///
+/// [Bloc]에 TCA 패턴을 적용하는 추상 기본 클래스입니다.
+/// 액션 처리를 위한 일관된 진입점을 제공하며, 순수 리듀서에 로직을 위임합니다.
+///
+/// - [A]: 액션 타입.
+/// - [S]: 상태 타입.
+/// - [E]: 환경 타입.
+///
+abstract class BlocArchTca<A, S, E> extends Bloc<A, S> with TcaMixin<A, S, E> {
+  /// The dependencies for the BLoC.
+  ///
   /// ---
-  /// Bloc이 닫힐 때 상위 Bloc 클래스의 close 메서드를 호출하여 리소스 정리를 완료합니다.
-  @override
-  Future<void> close() => super.close();
+  ///
+  /// BLoC의 의존성입니다.
+  final E environment;
+
+  /// Creates a [BlocArchTca].
+  ///
+  /// ---
+  ///
+  /// [BlocArchTca]를 생성합니다.
+  BlocArchTca(super.initialState, this.environment);
+
+  /// A helper that runs the reducer and applies its results.
+  ///
+  /// This method handles the standard boilerplate: calling the reducer,
+  /// emitting the new state, and executing any side effects.
+  ///
+  /// - [emit]: The [Emitter] provided by the BLoC framework.
+  /// - [event]: The BLoC event to be processed.
+  ///
+  /// ---
+  ///
+  /// 리듀서를 실행하고 그 결과를 적용하는 헬퍼 메서드입니다.
+  ///
+  /// 리듀서 호출, 새로운 상태 방출, 부수 효과 실행과 같은 반복적인 코드를 처리합니다.
+  ///
+  /// - [emit]: BLoC 프레임워크가 제공하는 [Emitter].
+  /// - [event]: 처리할 BLoC 이벤트.
+  @protected
+  void onAction<Event extends A>(Event event, Emitter<S> emit) async {
+    final ReducerEffect<S, A> result = tcaReducer(event, state, environment);
+    emit(result.newState);
+    await result.effect.run();
+  }
+}
+
+/// An abstract base class that applies the TCA pattern to [Cubit].
+/// It provides a simple, direct entry point for handling actions.
+///
+/// - [A]: Action type.
+/// - [S]: State type.
+/// - [E]: Environment type.
+///
+/// ---
+///
+/// [Cubit]에 TCA 패턴을 적용하는 추상 기본 클래스입니다.
+/// 액션 처리를 위한 간단하고 직접적인 진입점을 제공합니다.
+///
+/// - [A]: 액션 타입.
+/// - [S]: 상태 타입.
+/// - [E]: 환경 타입.
+///
+abstract class CubitArchTca<A, S, E> extends Cubit<S> with TcaMixin<A, S, E> {
+  /// The dependencies for the [Cubit].
+  ///
+  /// ---
+  ///
+  /// [Cubit]의 의존성입니다.
+  final E environment;
+
+  /// Creates a [CubitArchTca].
+  ///
+  /// ---
+  ///
+  /// [CubitArchTca]를 생성합니다.
+  CubitArchTca(super.initialState, this.environment);
+
+  /// The main method to process an action.
+  /// It calls the reducer, then handles the state change and side effect execution.
+  ///
+  /// - [action]: The action to process.
+  ///
+  /// ---
+  ///
+  /// 액션을 처리하는 주 메서드입니다.
+  /// 리듀서를 호출한 후, 상태 변경과 부수 효과 실행을 처리합니다.
+  ///
+  /// - [action]: 처리할 액션.
+  ///
+  @protected
+  Future<void> onAction(A action) async {
+    final ReducerEffect<S, A> result = tcaReducer(action, state, environment);
+    emit(result.newState);
+    await result.effect.run();
+  }
 }

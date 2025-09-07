@@ -80,15 +80,14 @@ class CounterTcaBloc extends TcaBlocCounter {
         return (newState: newState, effect: TaskEither.right(CounterActions.none()));
       },
       incrementAsync: () {
-        final CounterState newState = currentState.copyWith(isLoading: true, error: null);
-        final TaskEither<Object, CounterActions> effect = tcaPerformEffect<Object, int>(
+        final newState = currentState.copyWith(isLoading: true, error: null);
+        final effect = tcaEffectBuilder(
           task: environment.performAsyncIncrement(currentCount: currentState.count),
           onSuccess: (newCount) {
             return CounterActions.success(newCount);
           },
           onFailure: (error) {
-            final errorMessage = error is Exception ? error.toString() : 'Unknown error';
-            return errorMessage;
+            return CounterActions.failed(error.toString());
           },
         );
         return (newState: newState, effect: effect);

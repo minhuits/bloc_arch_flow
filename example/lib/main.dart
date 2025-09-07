@@ -42,20 +42,17 @@ class _CounterPageState extends State<CounterPage> {
     context.read<CounterMviBloc>().mviEffects.listen((effect) {
       if (!context.mounted) return;
 
-      switch (effect) {
-        case ShowToast():
-          (data) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data.message)));
-          };
-        case NavigateTo():
-          (data) {
-            debugPrint('Navigating to: ${data.route}');
-          };
-        case PlaySound():
-          (data) {
-            debugPrint('Playing sound: ${data.soundAsset}');
-          };
-      }
+      effect.when(
+        showToast: (data) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data)));
+        },
+        navigateTo: (data) {
+          debugPrint('Navigating to: $data');
+        },
+        playSound: (data) {
+          debugPrint('Playing sound: $data');
+        },
+      );
     });
   }
 
