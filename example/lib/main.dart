@@ -39,7 +39,7 @@ class _CounterPageState extends State<CounterPage> {
   @override
   void initState() {
     super.initState();
-    context.read<CounterMviBloc>().mviEffects.listen((effect) {
+    context.read<CounterMviBloc>().effects.listen((effect) {
       if (!context.mounted) return;
 
       effect.when(
