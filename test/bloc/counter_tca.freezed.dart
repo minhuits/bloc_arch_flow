@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'counter_types.dart';
+part of 'counter_tca.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -11,6 +11,7 @@ part of 'counter_types.dart';
 
 // dart format off
 T _$identity<T>(T value) => value;
+
 /// @nodoc
 mixin _$CounterActions implements DiagnosticableTreeMixin {
 
@@ -189,6 +190,60 @@ extension CounterActionsPatterns on CounterActions {
 
   (
 
+  BothTasksSucceeded
+
+  value
+
+  )
+
+  ?
+
+  bothTasksSucceeded
+
+  ,
+
+  TResult
+
+  Function
+
+  (
+
+  AnyTaskFailed
+
+  value
+
+  )
+
+  ?
+
+  anyTaskFailed
+
+  ,
+
+  TResult
+
+  Function
+
+  (
+
+  RunBothTasks
+
+  value
+
+  )
+
+  ?
+
+  runBothTasks
+
+  ,
+
+  TResult
+
+  Function
+
+  (
+
   NoneTCA
 
   value
@@ -221,7 +276,10 @@ return decrement(_that);case IncrementAsyncTCA() when incrementAsync != null:
 return incrementAsync(_that);case ResetTCA() when reset != null:
 return reset(_that);case AsyncIncrementSuccess() when success != null:
 return success(_that);case AsyncIncrementFailed() when failed != null:
-return failed(_that);case NoneTCA() when none != null:
+return failed(_that);case BothTasksSucceeded() when bothTasksSucceeded != null:
+return bothTasksSucceeded(_that);case AnyTaskFailed() when anyTaskFailed != null:
+return anyTaskFailed(_that);case RunBothTasks() when runBothTasks != null:
+return runBothTasks(_that);case NoneTCA() when none != null:
 return none(_that);case _:
 return orElse();
 
@@ -242,7 +300,7 @@ return orElse();
 
 @optionalTypeArgs
 TResult map<TResult extends Object?>(
-    {required TResult Function( IncrementTCA value) increment, required TResult Function( DecrementTCA value) decrement, required TResult Function( IncrementAsyncTCA value) incrementAsync, required TResult Function( ResetTCA value) reset, required TResult Function( AsyncIncrementSuccess value) success, required TResult Function( AsyncIncrementFailed value) failed, required TResult Function( NoneTCA value) none,}) {
+    {required TResult Function( IncrementTCA value) increment, required TResult Function( DecrementTCA value) decrement, required TResult Function( IncrementAsyncTCA value) incrementAsync, required TResult Function( ResetTCA value) reset, required TResult Function( AsyncIncrementSuccess value) success, required TResult Function( AsyncIncrementFailed value) failed, required TResult Function( BothTasksSucceeded value) bothTasksSucceeded, required TResult Function( AnyTaskFailed value) anyTaskFailed, required TResult Function( RunBothTasks value) runBothTasks, required TResult Function( NoneTCA value) none,}) {
   final _that = this;
   switch (_that) {
     case IncrementTCA():
@@ -257,6 +315,12 @@ TResult map<TResult extends Object?>(
       return success(_that);
     case AsyncIncrementFailed():
       return failed(_that);
+    case BothTasksSucceeded():
+      return bothTasksSucceeded(_that);
+    case AnyTaskFailed():
+      return anyTaskFailed(_that);
+    case RunBothTasks():
+      return runBothTasks(_that);
     case NoneTCA():
       return none(_that);
   }
@@ -276,7 +340,7 @@ TResult map<TResult extends Object?>(
 
 @optionalTypeArgs
 TResult? mapOrNull<TResult extends Object?>(
-    {TResult? Function( IncrementTCA value)? increment, TResult? Function( DecrementTCA value)? decrement, TResult? Function( IncrementAsyncTCA value)? incrementAsync, TResult? Function( ResetTCA value)? reset, TResult? Function( AsyncIncrementSuccess value)? success, TResult? Function( AsyncIncrementFailed value)? failed, TResult? Function( NoneTCA value)? none,}) {
+    {TResult? Function( IncrementTCA value)? increment, TResult? Function( DecrementTCA value)? decrement, TResult? Function( IncrementAsyncTCA value)? incrementAsync, TResult? Function( ResetTCA value)? reset, TResult? Function( AsyncIncrementSuccess value)? success, TResult? Function( AsyncIncrementFailed value)? failed, TResult? Function( BothTasksSucceeded value)? bothTasksSucceeded, TResult? Function( AnyTaskFailed value)? anyTaskFailed, TResult? Function( RunBothTasks value)? runBothTasks, TResult? Function( NoneTCA value)? none,}) {
   final _that = this;
   switch (_that) {
     case IncrementTCA() when increment != null:
@@ -291,6 +355,12 @@ TResult? mapOrNull<TResult extends Object?>(
       return success(_that);
     case AsyncIncrementFailed() when failed != null:
       return failed(_that);
+    case BothTasksSucceeded() when bothTasksSucceeded != null:
+      return bothTasksSucceeded(_that);
+    case AnyTaskFailed() when anyTaskFailed != null:
+      return anyTaskFailed(_that);
+    case RunBothTasks() when runBothTasks != null:
+      return runBothTasks(_that);
     case NoneTCA() when none != null:
       return none(_that);
     case _:
@@ -363,6 +433,31 @@ failed
 TResult
 Function
 (
+int
+newCount
+)
+?
+bothTasksSucceeded
+,
+TResult
+Function
+(
+String
+error
+)
+?
+anyTaskFailed
+,
+TResult
+Function
+(
+)
+?
+runBothTasks
+,
+TResult
+Function
+(
 )
 ?
 none
@@ -377,7 +472,10 @@ return decrement();case IncrementAsyncTCA() when incrementAsync != null:
 return incrementAsync();case ResetTCA() when reset != null:
 return reset();case AsyncIncrementSuccess() when success != null:
 return success(_that.newCount);case AsyncIncrementFailed() when failed != null:
-return failed(_that.error);case NoneTCA() when none != null:
+return failed(_that.error);case BothTasksSucceeded() when bothTasksSucceeded != null:
+return bothTasksSucceeded(_that.newCount);case AnyTaskFailed() when anyTaskFailed != null:
+return anyTaskFailed(_that.error);case RunBothTasks() when runBothTasks != null:
+return runBothTasks();case NoneTCA() when none != null:
 return none();case _:
 return orElse();
 
@@ -396,7 +494,7 @@ return orElse();
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function() increment,required TResult Function() decrement,required TResult Function() incrementAsync,required TResult Function() reset,required TResult Function( int newCount) success,required TResult Function( String error) failed,required TResult Function() none,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function() increment,required TResult Function() decrement,required TResult Function() incrementAsync,required TResult Function() reset,required TResult Function( int newCount) success,required TResult Function( String error) failed,required TResult Function( int newCount) bothTasksSucceeded,required TResult Function( String error) anyTaskFailed,required TResult Function() runBothTasks,required TResult Function() none,}) {final _that = this;
 switch (_that) {
 case IncrementTCA():
 return increment();case DecrementTCA():
@@ -404,7 +502,10 @@ return decrement();case IncrementAsyncTCA():
 return incrementAsync();case ResetTCA():
 return reset();case AsyncIncrementSuccess():
 return success(_that.newCount);case AsyncIncrementFailed():
-return failed(_that.error);case NoneTCA():
+return failed(_that.error);case BothTasksSucceeded():
+return bothTasksSucceeded(_that.newCount);case AnyTaskFailed():
+return anyTaskFailed(_that.error);case RunBothTasks():
+return runBothTasks();case NoneTCA():
 return none();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -419,7 +520,7 @@ return none();}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()? increment,TResult? Function()? decrement,TResult? Function()? incrementAsync,TResult? Function()? reset,TResult? Function( int newCount)? success,TResult? Function( String error)? failed,TResult? Function()? none,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()? increment,TResult? Function()? decrement,TResult? Function()? incrementAsync,TResult? Function()? reset,TResult? Function( int newCount)? success,TResult? Function( String error)? failed,TResult? Function( int newCount)? bothTasksSucceeded,TResult? Function( String error)? anyTaskFailed,TResult? Function()? runBothTasks,TResult? Function()? none,}) {final _that = this;
 switch (_that) {
 case IncrementTCA() when increment != null:
 return increment();case DecrementTCA() when decrement != null:
@@ -427,7 +528,10 @@ return decrement();case IncrementAsyncTCA() when incrementAsync != null:
 return incrementAsync();case ResetTCA() when reset != null:
 return reset();case AsyncIncrementSuccess() when success != null:
 return success(_that.newCount);case AsyncIncrementFailed() when failed != null:
-return failed(_that.error);case NoneTCA() when none != null:
+return failed(_that.error);case BothTasksSucceeded() when bothTasksSucceeded != null:
+return bothTasksSucceeded(_that.newCount);case AnyTaskFailed() when anyTaskFailed != null:
+return anyTaskFailed(_that.error);case RunBothTasks() when runBothTasks != null:
+return runBothTasks();case NoneTCA() when none != null:
 return none();case _:
 return null;
 
@@ -440,29 +544,29 @@ return null;
 
 
 class IncrementTCA with DiagnosticableTreeMixin implements CounterActions {
-  const IncrementTCA();
+const IncrementTCA();
 
 
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterActions.increment'))
-  ;
-  }
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.increment'))
+;
+}
 
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is IncrementTCA);
-  }
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is IncrementTCA);
+}
 
 
-  @override
-  int get hashCode => runtimeType.hashCode;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'CounterActions.increment()';
-  }
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterActions.increment()';
+}
 
 
 }
@@ -472,29 +576,29 @@ class IncrementTCA with DiagnosticableTreeMixin implements CounterActions {
 
 
 class DecrementTCA with DiagnosticableTreeMixin implements CounterActions {
-  const DecrementTCA();
+const DecrementTCA();
 
 
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterActions.decrement'))
-  ;
-  }
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.decrement'))
+;
+}
 
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DecrementTCA);
-  }
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is DecrementTCA);
+}
 
 
-  @override
-  int get hashCode => runtimeType.hashCode;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'CounterActions.decrement()';
-  }
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterActions.decrement()';
+}
 
 
 }
@@ -504,29 +608,29 @@ class DecrementTCA with DiagnosticableTreeMixin implements CounterActions {
 
 
 class IncrementAsyncTCA with DiagnosticableTreeMixin implements CounterActions {
-  const IncrementAsyncTCA();
+const IncrementAsyncTCA();
 
 
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterActions.incrementAsync'))
-  ;
-  }
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.incrementAsync'))
+;
+}
 
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is IncrementAsyncTCA);
-  }
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is IncrementAsyncTCA);
+}
 
 
-  @override
-  int get hashCode => runtimeType.hashCode;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'CounterActions.incrementAsync()';
-  }
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterActions.incrementAsync()';
+}
 
 
 }
@@ -536,29 +640,29 @@ class IncrementAsyncTCA with DiagnosticableTreeMixin implements CounterActions {
 
 
 class ResetTCA with DiagnosticableTreeMixin implements CounterActions {
-  const ResetTCA();
+const ResetTCA();
 
 
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterActions.reset'))
-  ;
-  }
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.reset'))
+;
+}
 
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ResetTCA);
-  }
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is ResetTCA);
+}
 
 
-  @override
-  int get hashCode => runtimeType.hashCode;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'CounterActions.reset()';
-  }
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterActions.reset()';
+}
 
 
 }
@@ -568,33 +672,33 @@ class ResetTCA with DiagnosticableTreeMixin implements CounterActions {
 
 
 class AsyncIncrementSuccess with DiagnosticableTreeMixin implements CounterActions {
-  const AsyncIncrementSuccess(this.newCount);
+const AsyncIncrementSuccess(this.newCount);
 
 
-  final int newCount;
+final int newCount;
 
-  /// Create a copy of CounterActions
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $AsyncIncrementSuccessCopyWith<AsyncIncrementSuccess> get copyWith => _$AsyncIncrementSuccessCopyWithImpl<AsyncIncrementSuccess>(this, _$identity);
-
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterActions.success'))
-  ..add(DiagnosticsProperty('newCount', newCount));
-  }
-
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AsyncIncrementSuccess&&(identical(other.newCount, newCount) || other.newCount == newCount));
-  }
+/// Create a copy of CounterActions
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AsyncIncrementSuccessCopyWith<AsyncIncrementSuccess> get copyWith => _$AsyncIncrementSuccessCopyWithImpl<AsyncIncrementSuccess>(this, _$identity);
 
 
-  @override
-  int get hashCode => Object.hash(runtimeType,newCount);
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.success'))
+..add(DiagnosticsProperty('newCount', newCount));
+}
+
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is AsyncIncrementSuccess&&(identical(other.newCount, newCount) || other.newCount == newCount));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,newCount);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
@@ -617,10 +721,10 @@ int newCount
 /// @nodoc
 class _$AsyncIncrementSuccessCopyWithImpl<$Res>
 implements $AsyncIncrementSuccessCopyWith<$Res> {
-  _$AsyncIncrementSuccessCopyWithImpl(this._self, this._then);
+_$AsyncIncrementSuccessCopyWithImpl(this._self, this._then);
 
-  final AsyncIncrementSuccess _self;
-  final $Res Function(AsyncIncrementSuccess) _then;
+final AsyncIncrementSuccess _self;
+final $Res Function(AsyncIncrementSuccess) _then;
 
 /// Create a copy of CounterActions
 /// with the given fields replaced by the non-null parameter values.
@@ -638,33 +742,33 @@ as int,
 
 
 class AsyncIncrementFailed with DiagnosticableTreeMixin implements CounterActions {
-  const AsyncIncrementFailed(this.error);
+const AsyncIncrementFailed(this.error);
 
 
-  final String error;
+final String error;
 
-  /// Create a copy of CounterActions
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $AsyncIncrementFailedCopyWith<AsyncIncrementFailed> get copyWith => _$AsyncIncrementFailedCopyWithImpl<AsyncIncrementFailed>(this, _$identity);
-
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterActions.failed'))
-  ..add(DiagnosticsProperty('error', error));
-  }
-
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AsyncIncrementFailed&&(identical(other.error, error) || other.error == error));
-  }
+/// Create a copy of CounterActions
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AsyncIncrementFailedCopyWith<AsyncIncrementFailed> get copyWith => _$AsyncIncrementFailedCopyWithImpl<AsyncIncrementFailed>(this, _$identity);
 
 
-  @override
-  int get hashCode => Object.hash(runtimeType,error);
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.failed'))
+..add(DiagnosticsProperty('error', error));
+}
+
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is AsyncIncrementFailed&&(identical(other.error, error) || other.error == error));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,error);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
@@ -687,10 +791,10 @@ String error
 /// @nodoc
 class _$AsyncIncrementFailedCopyWithImpl<$Res>
 implements $AsyncIncrementFailedCopyWith<$Res> {
-  _$AsyncIncrementFailedCopyWithImpl(this._self, this._then);
+_$AsyncIncrementFailedCopyWithImpl(this._self, this._then);
 
-  final AsyncIncrementFailed _self;
-  final $Res Function(AsyncIncrementFailed) _then;
+final AsyncIncrementFailed _self;
+final $Res Function(AsyncIncrementFailed) _then;
 
 /// Create a copy of CounterActions
 /// with the given fields replaced by the non-null parameter values.
@@ -707,30 +811,202 @@ as String,
 /// @nodoc
 
 
+class BothTasksSucceeded with DiagnosticableTreeMixin implements CounterActions {
+const BothTasksSucceeded(this.newCount);
+
+
+final int newCount;
+
+/// Create a copy of CounterActions
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$BothTasksSucceededCopyWith<BothTasksSucceeded> get copyWith => _$BothTasksSucceededCopyWithImpl<BothTasksSucceeded>(this, _$identity);
+
+
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.bothTasksSucceeded'))
+..add(DiagnosticsProperty('newCount', newCount));
+}
+
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is BothTasksSucceeded&&(identical(other.newCount, newCount) || other.newCount == newCount));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,newCount);
+
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterActions.bothTasksSucceeded(newCount: $newCount)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $BothTasksSucceededCopyWith<$Res> implements $CounterActionsCopyWith<$Res> {
+factory $BothTasksSucceededCopyWith(BothTasksSucceeded value, $Res Function(BothTasksSucceeded) _then) = _$BothTasksSucceededCopyWithImpl;
+@useResult
+$Res call({
+int newCount
+});
+
+
+}
+/// @nodoc
+class _$BothTasksSucceededCopyWithImpl<$Res>
+implements $BothTasksSucceededCopyWith<$Res> {
+_$BothTasksSucceededCopyWithImpl(this._self, this._then);
+
+final BothTasksSucceeded _self;
+final $Res Function(BothTasksSucceeded) _then;
+
+/// Create a copy of CounterActions
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? newCount = null,}) {
+return _then(BothTasksSucceeded(
+null == newCount ? _self.newCount : newCount // ignore: cast_nullable_to_non_nullable
+as int,
+));
+}
+
+
+}
+
+/// @nodoc
+
+
+class AnyTaskFailed with DiagnosticableTreeMixin implements CounterActions {
+const AnyTaskFailed(this.error);
+
+
+final String error;
+
+/// Create a copy of CounterActions
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AnyTaskFailedCopyWith<AnyTaskFailed> get copyWith => _$AnyTaskFailedCopyWithImpl<AnyTaskFailed>(this, _$identity);
+
+
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.anyTaskFailed'))
+..add(DiagnosticsProperty('error', error));
+}
+
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is AnyTaskFailed&&(identical(other.error, error) || other.error == error));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,error);
+
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterActions.anyTaskFailed(error: $error)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AnyTaskFailedCopyWith<$Res> implements $CounterActionsCopyWith<$Res> {
+factory $AnyTaskFailedCopyWith(AnyTaskFailed value, $Res Function(AnyTaskFailed) _then) = _$AnyTaskFailedCopyWithImpl;
+@useResult
+$Res call({
+String error
+});
+
+
+}
+/// @nodoc
+class _$AnyTaskFailedCopyWithImpl<$Res>
+implements $AnyTaskFailedCopyWith<$Res> {
+_$AnyTaskFailedCopyWithImpl(this._self, this._then);
+
+final AnyTaskFailed _self;
+final $Res Function(AnyTaskFailed) _then;
+
+/// Create a copy of CounterActions
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
+return _then(AnyTaskFailed(
+null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String,
+));
+}
+
+
+}
+
+/// @nodoc
+
+
+class RunBothTasks with DiagnosticableTreeMixin implements CounterActions {
+const RunBothTasks();
+
+
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.runBothTasks'))
+;
+}
+
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is RunBothTasks);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterActions.runBothTasks()';
+}
+
+
+}
+
+
+/// @nodoc
+
+
 class NoneTCA with DiagnosticableTreeMixin implements CounterActions {
-  const NoneTCA();
+const NoneTCA();
 
 
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterActions.none'))
-  ;
-  }
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterActions.none'))
+;
+}
 
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NoneTCA);
-  }
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is NoneTCA);
+}
 
 
-  @override
-  int get hashCode => runtimeType.hashCode;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'CounterActions.none()';
-  }
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterActions.none()';
+}
 
 
 }
@@ -916,29 +1192,29 @@ return null;
 
 
 class Increment with DiagnosticableTreeMixin implements CounterIntent {
-  const Increment();
+const Increment();
 
 
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterIntent.increment'))
-  ;
-  }
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterIntent.increment'))
+;
+}
 
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Increment);
-  }
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is Increment);
+}
 
 
-  @override
-  int get hashCode => runtimeType.hashCode;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'CounterIntent.increment()';
-  }
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterIntent.increment()';
+}
 
 
 }
@@ -948,29 +1224,29 @@ class Increment with DiagnosticableTreeMixin implements CounterIntent {
 
 
 class Decrement with DiagnosticableTreeMixin implements CounterIntent {
-  const Decrement();
+const Decrement();
 
 
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterIntent.decrement'))
-  ;
-  }
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterIntent.decrement'))
+;
+}
 
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Decrement);
-  }
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is Decrement);
+}
 
 
-  @override
-  int get hashCode => runtimeType.hashCode;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'CounterIntent.decrement()';
-  }
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterIntent.decrement()';
+}
 
 
 }
@@ -980,29 +1256,29 @@ class Decrement with DiagnosticableTreeMixin implements CounterIntent {
 
 
 class IncrementAsync with DiagnosticableTreeMixin implements CounterIntent {
-  const IncrementAsync();
+const IncrementAsync();
 
 
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterIntent.incrementAsync'))
-  ;
-  }
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterIntent.incrementAsync'))
+;
+}
 
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is IncrementAsync);
-  }
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is IncrementAsync);
+}
 
 
-  @override
-  int get hashCode => runtimeType.hashCode;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'CounterIntent.incrementAsync()';
-  }
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterIntent.incrementAsync()';
+}
 
 
 }
@@ -1012,29 +1288,29 @@ class IncrementAsync with DiagnosticableTreeMixin implements CounterIntent {
 
 
 class Reset with DiagnosticableTreeMixin implements CounterIntent {
-  const Reset();
+const Reset();
 
 
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterIntent.reset'))
-  ;
-  }
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterIntent.reset'))
+;
+}
 
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Reset);
-  }
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is Reset);
+}
 
 
-  @override
-  int get hashCode => runtimeType.hashCode;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  @override
-  String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'CounterIntent.reset()';
-  }
+@override
+String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
+return 'CounterIntent.reset()';
+}
 
 
 }
@@ -1214,33 +1490,33 @@ return null;
 
 
 class ShowToast with DiagnosticableTreeMixin implements CounterEffect {
-  const ShowToast(this.message);
+const ShowToast(this.message);
 
 
-  final String message;
+final String message;
 
-  /// Create a copy of CounterEffect
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $ShowToastCopyWith<ShowToast> get copyWith => _$ShowToastCopyWithImpl<ShowToast>(this, _$identity);
-
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterEffect.showToast'))
-  ..add(DiagnosticsProperty('message', message));
-  }
-
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ShowToast&&(identical(other.message, message) || other.message == message));
-  }
+/// Create a copy of CounterEffect
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ShowToastCopyWith<ShowToast> get copyWith => _$ShowToastCopyWithImpl<ShowToast>(this, _$identity);
 
 
-  @override
-  int get hashCode => Object.hash(runtimeType,message);
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterEffect.showToast'))
+..add(DiagnosticsProperty('message', message));
+}
+
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is ShowToast&&(identical(other.message, message) || other.message == message));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,message);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
@@ -1263,10 +1539,10 @@ String message
 /// @nodoc
 class _$ShowToastCopyWithImpl<$Res>
 implements $ShowToastCopyWith<$Res> {
-  _$ShowToastCopyWithImpl(this._self, this._then);
+_$ShowToastCopyWithImpl(this._self, this._then);
 
-  final ShowToast _self;
-  final $Res Function(ShowToast) _then;
+final ShowToast _self;
+final $Res Function(ShowToast) _then;
 
 /// Create a copy of CounterEffect
 /// with the given fields replaced by the non-null parameter values.
@@ -1284,33 +1560,33 @@ as String,
 
 
 class NavigateTo with DiagnosticableTreeMixin implements CounterEffect {
-  const NavigateTo(this.route);
+const NavigateTo(this.route);
 
 
-  final String route;
+final String route;
 
-  /// Create a copy of CounterEffect
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $NavigateToCopyWith<NavigateTo> get copyWith => _$NavigateToCopyWithImpl<NavigateTo>(this, _$identity);
-
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterEffect.navigateTo'))
-  ..add(DiagnosticsProperty('route', route));
-  }
-
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is NavigateTo&&(identical(other.route, route) || other.route == route));
-  }
+/// Create a copy of CounterEffect
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$NavigateToCopyWith<NavigateTo> get copyWith => _$NavigateToCopyWithImpl<NavigateTo>(this, _$identity);
 
 
-  @override
-  int get hashCode => Object.hash(runtimeType,route);
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterEffect.navigateTo'))
+..add(DiagnosticsProperty('route', route));
+}
+
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is NavigateTo&&(identical(other.route, route) || other.route == route));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,route);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
@@ -1333,10 +1609,10 @@ String route
 /// @nodoc
 class _$NavigateToCopyWithImpl<$Res>
 implements $NavigateToCopyWith<$Res> {
-  _$NavigateToCopyWithImpl(this._self, this._then);
+_$NavigateToCopyWithImpl(this._self, this._then);
 
-  final NavigateTo _self;
-  final $Res Function(NavigateTo) _then;
+final NavigateTo _self;
+final $Res Function(NavigateTo) _then;
 
 /// Create a copy of CounterEffect
 /// with the given fields replaced by the non-null parameter values.
@@ -1354,33 +1630,33 @@ as String,
 
 
 class PlaySound with DiagnosticableTreeMixin implements CounterEffect {
-  const PlaySound(this.soundAsset);
+const PlaySound(this.soundAsset);
 
 
-  final String soundAsset;
+final String soundAsset;
 
-  /// Create a copy of CounterEffect
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $PlaySoundCopyWith<PlaySound> get copyWith => _$PlaySoundCopyWithImpl<PlaySound>(this, _$identity);
-
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-  properties
-  ..add(DiagnosticsProperty('type', 'CounterEffect.playSound'))
-  ..add(DiagnosticsProperty('soundAsset', soundAsset));
-  }
-
-  @override
-  bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaySound&&(identical(other.soundAsset, soundAsset) || other.soundAsset == soundAsset));
-  }
+/// Create a copy of CounterEffect
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$PlaySoundCopyWith<PlaySound> get copyWith => _$PlaySoundCopyWithImpl<PlaySound>(this, _$identity);
 
 
-  @override
-  int get hashCode => Object.hash(runtimeType,soundAsset);
+@override
+void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+properties
+..add(DiagnosticsProperty('type', 'CounterEffect.playSound'))
+..add(DiagnosticsProperty('soundAsset', soundAsset));
+}
+
+@override
+bool operator ==(Object other) {
+return identical(this, other) || (other.runtimeType == runtimeType&&other is PlaySound&&(identical(other.soundAsset, soundAsset) || other.soundAsset == soundAsset));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,soundAsset);
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
@@ -1403,10 +1679,10 @@ String soundAsset
 /// @nodoc
 class _$PlaySoundCopyWithImpl<$Res>
 implements $PlaySoundCopyWith<$Res> {
-  _$PlaySoundCopyWithImpl(this._self, this._then);
+_$PlaySoundCopyWithImpl(this._self, this._then);
 
-  final PlaySound _self;
-  final $Res Function(PlaySound) _then;
+final PlaySound _self;
+final $Res Function(PlaySound) _then;
 
 /// Create a copy of CounterEffect
 /// with the given fields replaced by the non-null parameter values.
@@ -1468,10 +1744,10 @@ int count, bool isLoading, String? error
 /// @nodoc
 class _$CounterStateCopyWithImpl<$Res>
 implements $CounterStateCopyWith<$Res> {
-  _$CounterStateCopyWithImpl(this._self, this._then);
+_$CounterStateCopyWithImpl(this._self, this._then);
 
-  final CounterState _self;
-  final $Res Function(CounterState) _then;
+final CounterState _self;
+final $Res Function(CounterState) _then;
 
 /// Create a copy of CounterState
 /// with the given fields replaced by the non-null parameter values.
@@ -1621,7 +1897,7 @@ return null;
 
 
 class _CounterState with DiagnosticableTreeMixin implements CounterState {
-  const _CounterState({this.count = 0, this.isLoading = false, this.error});
+const _CounterState({this.count = 0, this.isLoading = false, this.error});
 
 
 @override@JsonKey() final int count;
@@ -1672,10 +1948,10 @@ int count, bool isLoading, String? error
 /// @nodoc
 class __$CounterStateCopyWithImpl<$Res>
 implements _$CounterStateCopyWith<$Res> {
-  __$CounterStateCopyWithImpl(this._self, this._then);
+__$CounterStateCopyWithImpl(this._self, this._then);
 
-  final _CounterState _self;
-  final $Res Function(_CounterState) _then;
+final _CounterState _self;
+final $Res Function(_CounterState) _then;
 
 /// Create a copy of CounterState
 /// with the given fields replaced by the non-null parameter values.

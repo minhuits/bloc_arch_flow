@@ -15,11 +15,11 @@ class MyApp extends StatelessWidget {
     final environment = CounterEnvironment();
 
     return MaterialApp(
-      title: 'Bloc MVI Example',
+      title: 'Bloc Arch Flow Example',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: MultiBlocProvider(
         providers: [
-          BlocProvider(create: (_) => CounterMviBloc(environment)),
+          BlocProvider(create: (_) => CounterMviCubit(environment)),
           BlocProvider(create: (_) => CounterTcaBloc(environment)),
         ],
         child: const CounterPage(),
@@ -39,7 +39,8 @@ class _CounterPageState extends State<CounterPage> {
   @override
   void initState() {
     super.initState();
-    context.read<CounterMviBloc>().effects.listen((effect) {
+
+    context.read<CounterMviCubit>().effects.listen((CounterEffect effect) {
       if (!context.mounted) return;
 
       effect.when(
@@ -64,7 +65,7 @@ class _CounterPageState extends State<CounterPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            BlocBuilder<CounterMviBloc, CounterState>(
+            BlocBuilder<CounterMviCubit, CounterState>(
               builder: (context, state) {
                 return Column(
                   children: [
@@ -77,21 +78,23 @@ class _CounterPageState extends State<CounterPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         ElevatedButton(
-                          onPressed: () =>
-                              context.read<CounterMviBloc>().add(const CounterIntent.decrement()),
+                          onPressed: () => context.read<CounterMviCubit>().onIntent(
+                            const CounterIntent.decrement(),
+                          ),
                           child: const Text('-'),
                         ),
                         const SizedBox(width: 10),
                         ElevatedButton(
-                          onPressed: () =>
-                              context.read<CounterMviBloc>().add(const CounterIntent.increment()),
+                          onPressed: () => context.read<CounterMviCubit>().onIntent(
+                            const CounterIntent.increment(),
+                          ),
                           child: const Text('+'),
                         ),
                         const SizedBox(width: 10),
                         ElevatedButton(
                           onPressed: state.isLoading
                               ? null
-                              : () => context.read<CounterMviBloc>().add(
+                              : () => context.read<CounterMviCubit>().onIntent(
                                   const CounterIntent.incrementAsync(),
                                 ),
                           child: const Text('Async +'),
@@ -99,7 +102,7 @@ class _CounterPageState extends State<CounterPage> {
                         const SizedBox(width: 10),
                         ElevatedButton(
                           onPressed: () =>
-                              context.read<CounterMviBloc>().add(const CounterIntent.reset()),
+                              context.read<CounterMviCubit>().onIntent(const CounterIntent.reset()),
                           child: const Text('Reset'),
                         ),
                       ],
