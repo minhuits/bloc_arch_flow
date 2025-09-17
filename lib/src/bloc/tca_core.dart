@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart' show Bloc, Cubit, Emitter;
-import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart' show TaskEither, Either;
 import 'package:meta/meta.dart' show protected;
 
